@@ -1,18 +1,16 @@
 # Meydan FZ Employee Knowledge Hub
 
-This public GitHub Pages site presents web-readable employee guidance and retains the original PDFs as source references.
+A web-only employee knowledge base. PDF download links and the public PDF archive have been removed.
 
-## Current conversion status
-- Initial web article layer added for company formation, amendments, re-domiciliation, residence visa issuance/renewal/amendment, visa allocation, immigration card, absconding approval, and email/KYC verification.
-- Original PDF archive retained (36 source files).
-- Search covers the text of the web articles.
-- Each article includes a source PDF link and a draft/review status.
+## Current content
+- Searchable web articles covering company formation, amendments, re-domiciliation, residence visa issuance/renewal/amendment, visa allocation, immigration card, absconding approval, and email/KYC verification.
+- Article status and last-updated labels.
 
-## Important limitation
-The original PDFs are image/scanned documents. Their complete contents have not yet been OCR-transcribed and checked line by line. Articles marked **Draft** are an initial structured conversion from information already supplied in the knowledge-base work; they are not a complete replacement for every page of every PDF. Continue the conversion by OCR-reviewing each source PDF, then update the matching article. Confirm all fees, timelines, legal/immigration requirements and internal routing with the authorised process owner before operational use.
+## Content status
+Articles marked Draft require review. Some articles are initial structured summaries and do not yet represent a complete verified transcription of every source procedure. Confirm fees, timelines, legal/immigration requirements and internal routing with the authorised process owner before operational use.
 
 ## Publish
-GitHub Pages should be configured to deploy from the `main` branch and `/(root)` folder.
+GitHub Pages deploys from the `main` branch and `/(root)` folder.
 
 ## Security
 Do not add client passports, KYC documents, personal data, credentials or confidential case records to this public repository.
