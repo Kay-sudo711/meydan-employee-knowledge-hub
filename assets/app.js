@@ -1,32 +1,15 @@
-let activeCategory = "All";
-const categories = ["All", ...new Set(DOCS.map(d=>d.category))];
-const app = document.getElementById("app");
+let activeCategory="All", activeArticle=null;
+const app=document.getElementById("app");
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function render(){
- const q=(document.getElementById("q")?.value||"").trim().toLowerCase();
- const filtered=DOCS.filter(d=>(activeCategory==="All"||d.category===activeCategory) &&
-   (!q || (d.title+" "+d.category+" "+d.filename).toLowerCase().includes(q)));
- app.innerHTML=`
- <header><div class="head"><div class="brand">MEYDAN FZ<small>EMPLOYEE KNOWLEDGE HUB</small></div><nav><a href="#library">Document Library</a><a href="#guidance">Using this hub</a></nav></div></header>
- <main>
-  <section class="hero">
-   <div class="eyebrow">Employee process reference centre</div>
-   <h1>Meydan FZ Knowledge Hub</h1>
-   <p>A central library of employee process guides, visa procedures, company formation references, immigration card instructions, FAQs and email templates supplied in the knowledge-base ZIP.</p>
-   <div class="search"><input id="q" type="search" placeholder="Search documents, topics or categories..." value="${esc(q)}"><button id="searchBtn">Search</button></div>
-   <div class="stats"><span>${DOCS.length} source documents</span><span>${categories.length-1} knowledge areas</span><span>PDF reference library</span></div>
-   <div class="results">${filtered.length} matching documents</div>
-  </section>
-  <section id="library">
-   <div class="rowhead"><div><h2>Browse the knowledge library</h2><div class="muted">Choose a category or open an individual process document.</div></div></div>
-   <div class="filters">${categories.map(c=>`<button class="filter ${activeCategory===c?'active':''}" data-cat="${esc(c)}">${esc(c)}</button>`).join("")}</div>
-   <div class="grid">${filtered.map(d=>`<article class="card"><div class="tag">${esc(d.category)}</div><h3>${esc(d.title)}</h3><p>${esc(d.filename)}</p><div class="actions"><a href="${encodeURI(d.file)}" target="_blank" rel="noopener">Open PDF ↗</a><a href="${encodeURI(d.file)}" download>Download ↓</a></div></article>`).join("")}</div>
-   ${filtered.length===0?'<div class="empty">No matching documents. Try a different keyword or category.</div>':''}
-  </section>
-  <section id="guidance" class="notice"><strong>Employee use and content control:</strong> These documents are the source files supplied for this knowledge hub. Check the document itself for its latest revision and confirm current fees, processing times, authority requirements and internal routing with the authorised process owner before advising a client. Do not upload client-specific passports, KYC records, credentials or confidential case files to a public repository.</section>
- </main><footer>Meydan FZ Employee Knowledge Hub · Built from supplied reference documents · Internal use subject to company approval</footer>`;
- document.getElementById("q").addEventListener("input",()=>{const val=document.getElementById("q").value;const pos=document.getElementById("q").selectionStart;render();const inp=document.getElementById("q");inp.focus();inp.setSelectionRange(pos,pos);});
- document.getElementById("searchBtn").addEventListener("click",render);
- document.querySelectorAll("[data-cat]").forEach(b=>b.addEventListener("click",()=>{activeCategory=b.dataset.cat;render();}));
+const cats=["All",...new Set(ARTICLES.map(a=>a.category))];
+function header(){return '<header><div class="head"><a class="brand" href="#" id="homeLink">MEYDAN FZ<small>EMPLOYEE KNOWLEDGE HUB</small></a><nav><a href="#" id="homeNav">Home</a><a href="#pdf-library" id="pdfNav">Original PDFs</a></nav></div></header>';}
+function renderHome(q=""){
+ const matches=ARTICLES.filter(a=>(activeCategory==="All"||a.category===activeCategory)&&(!q||[a.title,a.summary,a.category,a.body].join(" ").toLowerCase().includes(q.toLowerCase())));
+ app.innerHTML=header()+`<main><section class="hero"><div class="eyebrow">Employee process reference centre</div><h1>Meydan FZ Knowledge Hub</h1><p>Read procedures and operational guidance directly on this website. Search the written articles or open the original source PDFs when needed.</p><div class="search"><input id="q" type="search" placeholder="Search SOPs, fees, documents or keywords..." value="${esc(q)}"><button id="searchBtn">Search</button></div><div class="stats"><span>${ARTICLES.length} web articles</span><span>${cats.length-1} categories</span><span>36 original PDFs retained</span></div></section><section><div class="rowhead"><div><h2>Browse procedures</h2><div class="muted">Select an article to read the full guidance.</div></div><span class="muted">${matches.length} results</span></div><div class="filters">${cats.map(c=>`<button class="filter ${activeCategory===c?'active':''}" data-cat="${esc(c)}">${esc(c)}</button>`).join("")}</div><div class="grid">${matches.map((a,i)=>`<article class="card"><div class="tag">${esc(a.category)}</div><h3>${esc(a.title)}</h3><p>${esc(a.summary)}</p><div class="meta">${esc(a.status)} · Updated ${esc(a.updated)}</div><div class="actions"><button class="read" data-article="${ARTICLES.indexOf(a)}">Read article →</button></div></article>`).join("")}</div>${matches.length?'':'<div class="empty">No matching articles. Try another keyword.</div>'}</section><section id="pdf-library" class="pdfbox"><h2>Original PDF archive</h2><p class="muted">The original source PDFs are retained as reference downloads while their contents are progressively converted into web articles.</p><div class="pdfgrid">${DOCS.map(d=>`<a href="${encodeURI(d.file)}" target="_blank" rel="noopener">${esc(d.category)} · ${esc(d.title)} ↗</a>`).join("")}</div></section><div class="notice"><b>Content control:</b> Articles marked Draft require review by the authorised process owner. Confirm current fees, processing times, legal requirements and internal routing before operational use. Never upload client-specific KYC documents, passport copies, credentials or confidential case records to this public repository.</div></main><footer>Meydan FZ Employee Knowledge Hub · Web articles and original source archive</footer>`;
+ document.getElementById("q").addEventListener("input",e=>renderHome(e.target.value));document.getElementById("searchBtn").addEventListener("click",()=>renderHome(document.getElementById("q").value));
+ document.querySelectorAll("[data-cat]").forEach(b=>b.addEventListener("click",()=>{activeCategory=b.dataset.cat;renderHome(document.getElementById("q").value)}));
+ document.querySelectorAll("[data-article]").forEach(b=>b.addEventListener("click",()=>renderArticle(Number(b.dataset.article))));
+ document.getElementById("homeLink").onclick=e=>{e.preventDefault();renderHome()};document.getElementById("homeNav").onclick=e=>{e.preventDefault();renderHome()};document.getElementById("pdfNav").onclick=e=>{e.preventDefault();document.getElementById("pdf-library")?.scrollIntoView({behavior:"smooth"})};
 }
-render();
+function renderArticle(i){const a=ARTICLES[i];app.innerHTML=header()+`<main><a href="#" id="back" class="back">← Back to all procedures</a><article class="article"><div class="tag">${esc(a.category)}</div><h1>${esc(a.title)}</h1><p class="lead">${esc(a.summary)}</p><div class="articlemeta"><span>${esc(a.status)}</span><span>Last updated: ${esc(a.updated)}</span></div><div class="articlebody">${a.body}</div><div class="source"><b>Source reference:</b> <a href="${encodeURI(a.source)}" target="_blank" rel="noopener">Open original PDF ↗</a></div></article></main><footer>Meydan FZ Employee Knowledge Hub</footer>`;document.getElementById("back").onclick=e=>{e.preventDefault();renderHome()};document.getElementById("homeLink").onclick=e=>{e.preventDefault();renderHome()};document.getElementById("homeNav").onclick=e=>{e.preventDefault();renderHome()};}
+renderHome();

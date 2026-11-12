@@ -1,31 +1,18 @@
 # Meydan FZ Employee Knowledge Hub
 
-A static, searchable employee reference website built from the supplied `Meydan KC.zip`.
+This public GitHub Pages site presents web-readable employee guidance and retains the original PDFs as source references.
 
-## Included content
-- 36 original PDF reference documents
-- 6 knowledge areas
-- Search and category filters
-- Open and download links for every supplied PDF
-- Responsive layout for desktop and mobile
+## Current conversion status
+- Initial web article layer added for company formation, amendments, re-domiciliation, residence visa issuance/renewal/amendment, visa allocation, immigration card, absconding approval, and email/KYC verification.
+- Original PDF archive retained (36 source files).
+- Search covers the text of the web articles.
+- Each article includes a source PDF link and a draft/review status.
 
-## Run locally
-Open `index.html` in a browser. For best results, serve the folder with a static web server.
+## Important limitation
+The original PDFs are image/scanned documents. Their complete contents have not yet been OCR-transcribed and checked line by line. Articles marked **Draft** are an initial structured conversion from information already supplied in the knowledge-base work; they are not a complete replacement for every page of every PDF. Continue the conversion by OCR-reviewing each source PDF, then update the matching article. Confirm all fees, timelines, legal/immigration requirements and internal routing with the authorised process owner before operational use.
 
-## Publish as a new GitHub repository
-1. Create a new GitHub repository named `meydan-employee-knowledge-hub`.
-2. Upload the contents of this folder to the repository root (not the enclosing folder).
-3. In Settings → Pages, select **GitHub Actions** as the source.
-4. The included workflow deploys the site on pushes to `main`.
+## Publish
+GitHub Pages should be configured to deploy from the `main` branch and `/(root)` folder.
 
-## Source file handling
-The original PDFs are preserved under `documents/`, grouped by the folder structure in the supplied ZIP:
-- Email templates
-- FAQ and Queries
-- Visa
-- Visa Allocation
-- Immigration Card
-- Company formation
-
-## Important
-The site organises the supplied reference material; it does not independently verify that fees, timelines, legal requirements, authority instructions or internal email routing are current. Confirm these with the authorised process owner before operational use. Do not add client-specific KYC documents, passport copies, credentials or confidential case records to a public repository.
+## Security
+Do not add client passports, KYC documents, personal data, credentials or confidential case records to this public repository.
